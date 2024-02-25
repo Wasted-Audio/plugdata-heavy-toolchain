@@ -3,67 +3,67 @@ name: Create Package
 on: [push, workflow_dispatch]
 
 jobs:
-  build-macos:
-    name: MacOS Univeral
-    runs-on: macos-latest
-    steps:
+  # build-macos:
+  #   name: MacOS Univeral
+  #   runs-on: macos-latest
+  #   steps:
 
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
+  #   - uses: actions/checkout@v3
+  #     with:
+  #       submodules: recursive
 
-    - name: Install dependencies
-      working-directory: ${{github.workspace}}
-      run: brew install dfu-util
+  #   - name: Install dependencies
+  #     working-directory: ${{github.workspace}}
+  #     run: brew install dfu-util
 
-    - name: Run Packaging Script
-      working-directory: ${{github.workspace}}
-      run:
-       CLEAR_INTL=1 ./build.sh
+  #   - name: Run Packaging Script
+  #     working-directory: ${{github.workspace}}
+  #     run:
+  #      CLEAR_INTL=1 ./build.sh
 
-    - name: Archive Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: Heavy-MacOS-Universal
-        path: ${{github.workspace}}/Heavy
+  #   - name: Archive Artifacts
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: Heavy-MacOS-Universal
+  #       path: ${{github.workspace}}/Heavy
 
-    - name: Release Artifacts
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        prerelease: true
-        draft: true
-        files: Heavy-MacOS-Universal
+  #   - name: Release Artifacts
+  #     uses: softprops/action-gh-release@v1
+  #     if: startsWith(github.ref, 'refs/tags/')
+  #     with:
+  #       prerelease: true
+  #       draft: true
+  #       files: Heavy-MacOS-Universal
 
-  build-windows:
-    name: Windows
-    runs-on: windows-2022
-    steps:
-      - name: Install Packages
-        run: choco install make -y
+  # build-windows:
+  #   name: Windows
+  #   runs-on: windows-2022
+  #   steps:
+  #     - name: Install Packages
+  #       run: choco install make -y
 
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         submodules: recursive
 
-      - name: Run Packaging Script
-        working-directory: ${{github.workspace}}
-        run:
-          ./build.bat
+  #     - name: Run Packaging Script
+  #       working-directory: ${{github.workspace}}
+  #       run:
+  #         ./build.bat
 
-      - name: Archive Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Heavy-Win64
-          path: ${{github.workspace}}/Heavy
+  #     - name: Archive Artifacts
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: Heavy-Win64
+  #         path: ${{github.workspace}}/Heavy
 
-      - name: Release Artifacts
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          prerelease: true
-          draft: true
-          files: Heavy-Win64
+  #     - name: Release Artifacts
+  #       uses: softprops/action-gh-release@v1
+  #       if: startsWith(github.ref, 'refs/tags/')
+  #       with:
+  #         prerelease: true
+  #         draft: true
+  #         files: Heavy-Win64
 
   build-linux:
     name: Linux-x64
@@ -75,7 +75,9 @@ jobs:
       - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
     - name: Install Dependencies (apt)
-      run: apt update && apt install -y git binutils python3 python3-pip curl tar gzip xz-utils make patchelf libusb-dev build-essential rsync wget dfu-util
+      run: |
+        apt update && apt install -y git binutils python3 python3-pip curl tar gzip xz-utils make patchelf libusb-dev build-essential rsync wget dfu-util
+        pip install --break-system-packages -U pyinstaller
       #deps for build-anywhere:  csh gawk autoconf automake autotools-dev wget m4 flex bison texinfo unzip help2man meson gperf lzip libtool-bin patch ninja-build libstdc++6 libncurses5-dev
     - uses: actions/checkout@v3
       with:
