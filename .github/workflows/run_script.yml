@@ -69,7 +69,7 @@ jobs:
     name: Linux-x64
     runs-on: ubuntu-latest
     container:
-      image: debian:bullseye
+      image: debian:bookworm
       options: --privileged
       volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup
@@ -101,5 +101,3 @@ jobs:
         prerelease: true
         draft: true
         files: Heavy-Linux-x64
-
-    
