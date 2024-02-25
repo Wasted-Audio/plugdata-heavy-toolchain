@@ -22,7 +22,7 @@
 # popd
 # rm gcc-arm-none-eabi.tar.bz2
 
-# mkdir Heavy
+mkdir -p Heavy/bin
 # cp -rf gcc-arm-none-eabi/gcc-arm-*/bin ./Heavy
 # cp -rf gcc-arm-none-eabi/gcc-arm-*/lib ./Heavy
 # # cp -rf gcc-arm-none-eabi/gcc-arm-*/libexec ./Heavy
